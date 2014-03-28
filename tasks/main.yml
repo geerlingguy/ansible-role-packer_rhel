@@ -1,0 +1,100 @@
+---
+- name: Ensure necessary packages are installed.
+  yum: "pkg={{ item }} state=installed"
+  with_items:
+    - wget
+    - perl
+    - cpp
+    - gcc
+    - make
+    - kernel-headers
+    - kernel-devel
+    - kernel-devel-2.6.32-431.el6.x86_64
+    - libselinux-python
+
+# Fix slow DNS.
+- name: Fix slow DNS (adapted from Bento).
+  lineinfile: >
+    dest=/etc/sysconfig/network
+    regexp='^RES_OPTIONS'
+    line='RES_OPTIONS="single-request-reopen"'
+    state=present
+
+- name: Restart network service (explicitly).
+  service: name=network state=restarted
+
+# SSH daemon configuration.
+- name: Configure SSH daemon.
+  lineinfile: >
+    dest=/etc/ssh/sshd_config
+    regexp="{{ item.regexp }}"
+    line="{{ item.line }}"
+    state=present
+  with_items:
+    - { regexp: '^UseDNS', line: 'UseDNS no' }
+    - { regexp: '^GSSAPIAuthentication', line: 'GSSAPIAuthentication no' }
+
+# Vagrant SSH configuration.
+- name: Configure Vagrant .ssh directory.
+  file: path=/home/vagrant/.ssh state=directory owner=vagrant group=vagrant mode=700
+
+- name: Get Vagrant's public key.
+  get_url: >
+    url=https://github.com/mitchellh/vagrant/raw/master/keys/vagrant.pub
+    dest=/home/vagrant/.ssh/authorized_keys
+    owner=vagrant
+    group=vagrant
+    mode=600
+
+# VirtualBox tools installation.
+- name: Get VirtualBox version.
+  shell: cat /home/vagrant/.vbox_version
+  register: virtualbox_version
+
+- name: Mount VirtualBox guest additions ISO.
+  mount: >
+    name=/tmp/vbox
+    src=/home/vagrant/VBoxGuestAdditions_{{ virtualbox_version.stdout }}.iso
+    opts=loop
+    state=mounted
+    fstype=iso9660
+
+- name: Run VirtualBox guest additions installation.
+  shell: sh /tmp/vbox/VBoxLinuxAdditions.run
+  failed_when: false
+
+- name: Unmount VirtualBox guest additions ISO.
+  mount: >
+    name=/tmp/vbox
+    src=/home/vagrant/VBoxGuestAdditions_{{ virtualbox_version.stdout }}.iso
+    state=unmounted
+    fstype=iso9660
+
+- name: Remove all ISOs in vagrant home directory.
+  shell: "rm /home/vagrant/*.iso"
+
+# Cleanup tasks.
+- name: Remove unneeded packages.
+  yum: "pkg={{ item }} state=absent"
+  with_items:
+    - cpp
+    - kernel-devel
+    - kernel-headers
+
+- name: Clean up yum.
+  command: yum clean all
+
+- name: Remove any remnants of VirtualBox ISOs.
+  shell: rm -rf VBoxGuestAdditions_*.iso VBoxGuestAdditions_*.iso.?
+
+- name: Remove RedHat interface persistence (step 1).
+  shell: rm -f /etc/udev/rules.d/70-persistent-net.rules
+
+- name: Remove RedHat interface persistence (step 2).
+  lineinfile: >
+    dest=/etc/sysconfig/network-scripts/ifcfg-eth0
+    regexp="{{ item }}"
+    state=absent
+  with_items:
+    - '^HWADDR'
+    - '^UUID'
