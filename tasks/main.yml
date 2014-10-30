@@ -9,8 +9,13 @@
     - make
     - kernel-headers
     - kernel-devel
-    - kernel-devel-2.6.32-431.el6.x86_64
     - libselinux-python
+
+- name: Ensure necessary packages are installed (RHEL 6 only).
+  yum: "pkg={{ item }} state=installed"
+  with_items:
+    - kernel-devel-2.6.32-431.el6.x86_64
+  when: ansible_distribution_major_version == 6
 
 # Fix slow DNS.
 - name: Fix slow DNS (adapted from Bento).
