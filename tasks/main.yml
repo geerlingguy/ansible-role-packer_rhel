@@ -7,6 +7,7 @@
     - cpp
     - gcc
     - make
+    - bzip2
     - kernel-headers
     - kernel-devel
     - libselinux-python
