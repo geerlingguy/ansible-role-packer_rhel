@@ -53,31 +53,19 @@
     mode=600
 
 # VirtualBox tools installation.
-- name: Get VirtualBox version.
-  shell: cat /home/vagrant/.vbox_version
-  register: virtualbox_version
+- stat: path=/home/vagrant/.vbox_version
+  register: virtualbox_check
 
-- name: Mount VirtualBox guest additions ISO.
-  mount: >
-    name=/tmp/vbox
-    src=/home/vagrant/VBoxGuestAdditions_{{ virtualbox_version.stdout }}.iso
-    opts=loop
-    state=mounted
-    fstype=iso9660
+- include: virtualbox.yml
+  when: virtualbox_check.stat.exists
 
-- name: Run VirtualBox guest additions installation.
-  shell: sh /tmp/vbox/VBoxLinuxAdditions.run
-  failed_when: false
+# VMware tools installation.
+- shell: cat /proc/scsi/scsi | grep VMware
+  changed_when: false
+  register: vmware_check
 
-- name: Unmount VirtualBox guest additions ISO.
-  mount: >
-    name=/tmp/vbox
-    src=/home/vagrant/VBoxGuestAdditions_{{ virtualbox_version.stdout }}.iso
-    state=absent
-    fstype=iso9660
-
-- name: Remove all ISOs in vagrant home directory.
-  shell: "rm /home/vagrant/*.iso"
+- include: vmware.yml
+  when: vmware_check.rc == 0
 
 # Cleanup tasks.
 - name: Remove unneeded packages.

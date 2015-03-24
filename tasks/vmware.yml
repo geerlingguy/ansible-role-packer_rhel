@@ -1,0 +1,3 @@
+---
+- name: Install VMware tools.
+  yum: name=open-vm-tools state=installed
