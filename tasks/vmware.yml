@@ -1,3 +1,25 @@
 ---
+- name: Add VMWare tools repository.
+  template:
+    src: vmware-tools.repo.j2
+    dest: /etc/yum.repos.d/vmware-tools.repo
+
+- name: Import VMWare tools GPG keys.
+  rpm_key:
+    key: "{{ item }}"
+    state: present
+  with_items:
+    - "http://packages.vmware.com/tools/keys/VMWARE-PACKAGING-GPG-DSA-KEY.pub"
+    - "http://packages.vmware.com/tools/keys/VMWARE-PACKAGING-GPG-RSA-KEY.pub"
+
 - name: Install VMware tools.
-  yum: name=open-vm-tools state=installed
+  yum: "name={{ item }} state=installed"
+  with_items:
+    - vmware-tools-hgfs
+    - vmware-tools-esx-nox
+
+- name: Add vmhgfs module.
+  template:
+    src: vmhgfs.modules.j2
+    dest: /etc/sysconfig/modules/vmhgfs.modules
+    mode: 0755
