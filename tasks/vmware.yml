@@ -12,14 +12,64 @@
     - "http://packages.vmware.com/tools/keys/VMWARE-PACKAGING-GPG-DSA-KEY.pub"
     - "http://packages.vmware.com/tools/keys/VMWARE-PACKAGING-GPG-RSA-KEY.pub"
 
-- name: Install VMware tools.
+- name: Install VMware tools (RHEL 6).
   yum: "name={{ item }} state=installed"
   with_items:
     - vmware-tools-hgfs
     - vmware-tools-esx-nox
+  when: ansible_distribution_major_version <= 6
 
-- name: Add vmhgfs module.
+- name: Add vmhgfs module (RHEL 6).
   template:
     src: vmhgfs.modules.j2
     dest: /etc/sysconfig/modules/vmhgfs.modules
     mode: 0755
+  when: ansible_distribution_major_version <= 6
+
+- name: Install open-vm-tools (RHEL 7+).
+  yum: "name={{ item }} state=installed"
+  with_items:
+    - open-vm-tools
+  when: ansible_distribution_major_version >= 7
+
+- name: Create temporary directories for VMware tools.
+  file:
+    path: "/tmp/{{ item }}"
+    state: directory
+  with_items:
+    - vmfusion
+    - vmfusion-archive
+  when: ansible_distribution_major_version >= 7
+
+- name: Mount VMware tools.
+  mount:
+    name: /tmp/vmfusion
+    src: /home/vagrant/linux.iso
+    fstype: iso9660
+    state: mounted
+  when: ansible_distribution_major_version >= 7
+
+- name: Decompress VMware Tools installer into archive folder.
+  shell: tar xzf /tmp/vmfusion/VMwareTools-*.tar.gz -C /tmp/vmfusion-archive
+  when: ansible_distribution_major_version >= 7
+
+- name: Run the VMware tools installer.
+  shell: /tmp/vmfusion-archive/vmware-tools-distrib/vmware-install.pl --default
+  when: ansible_distribution_major_version >= 7
+
+- name: Unmount VMware tools.
+  mount:
+    name: /tmp/vmfusion
+    src: /home/vagrant/linux.iso
+    fstype: iso9660
+    state: unmounted
+  when: ansible_distribution_major_version >= 7
+
+- name: Remove temporary directories for VMware tools.
+  file:
+    path: "/tmp/{{ item }}"
+    state: absent
+  with_items:
+    - vmfusion
+    - vmfusion-archive
+  when: ansible_distribution_major_version >= 7
