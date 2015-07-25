@@ -4,23 +4,23 @@
   register: virtualbox_version
 
 - name: Mount VirtualBox guest additions ISO.
-  mount: >
-    name=/tmp/vbox
-    src=/home/vagrant/VBoxGuestAdditions_{{ virtualbox_version.stdout }}.iso
-    opts=loop
-    state=mounted
-    fstype=iso9660
+  mount:
+    name: /tmp/vbox
+    src: "/home/vagrant/VBoxGuestAdditions_{{ virtualbox_version.stdout }}.iso"
+    opts: loop
+    state: mounted
+    fstype: iso9660
 
 - name: Run VirtualBox guest additions installation.
   shell: sh /tmp/vbox/VBoxLinuxAdditions.run
   failed_when: false
 
 - name: Unmount VirtualBox guest additions ISO.
-  mount: >
-    name=/tmp/vbox
-    src=/home/vagrant/VBoxGuestAdditions_{{ virtualbox_version.stdout }}.iso
-    state=absent
-    fstype=iso9660
+  mount:
+    name: /tmp/vbox
+    src: "/home/vagrant/VBoxGuestAdditions_{{ virtualbox_version.stdout }}.iso"
+    state: absent
+    fstype: iso9660
 
 - name: Remove all ISOs in vagrant home directory.
   shell: "rm /home/vagrant/*.iso"
