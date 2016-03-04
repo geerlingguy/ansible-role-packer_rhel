@@ -3,4 +3,4 @@
   remote_user: root
 
   roles:
-    - ansible-role-homebrew
+    - ansible-role-packer-rhel
