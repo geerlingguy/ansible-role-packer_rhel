@@ -5,7 +5,7 @@
   register: kernel_release
 
 - name: Ensure necessary packages are installed.
-  yum: "pkg={{ item }} state=installed"
+  yum: "name={{ item }} state=installed"
   with_items:
     - wget
     - perl
@@ -77,7 +77,7 @@
 
 # Cleanup tasks.
 - name: Remove unneeded packages.
-  yum: "pkg={{ item }} state=absent"
+  yum: "name={{ item }} state=absent"
   with_items:
     - cpp
     - kernel-devel
