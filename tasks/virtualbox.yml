@@ -22,5 +22,7 @@
     state: absent
     fstype: iso9660
 
-- name: Remove all ISOs in vagrant home directory.
-  shell: "rm /home/vagrant/*.iso"
+- name: Delete VirtualBox guest additions ISO.
+  file:
+    src: "/home/vagrant/VBoxGuestAdditions_{{ virtualbox_version.stdout }}.iso"
+    state: absent
