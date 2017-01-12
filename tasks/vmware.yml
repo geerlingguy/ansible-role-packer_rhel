@@ -67,5 +67,5 @@
 
 - name: Delete VMware Tools.
   file:
-    src: /home/vagrant/linux.iso
+    path: /home/vagrant/linux.iso
     state: absent
