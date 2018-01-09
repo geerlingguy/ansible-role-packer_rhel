@@ -14,8 +14,8 @@
     - make
     - bzip2
     - kernel-headers
-    - kernel-devel
-    - "kernel-devel-{{ kernel_release.stdout }}"
+    - kernel-uek-devel
+    - "kernel-uek-devel-{{ kernel_release.stdout }}"
     - libselinux-python
     - cifs-utils
 
