@@ -6,7 +6,7 @@ galaxy_info:
   description: RedHat/CentOS configuration for Packer.
   company: "Midwestern Mac, LLC"
   license: "license (BSD, MIT)"
-  min_ansible_version: 1.8
+  min_ansible_version: 2.4
   platforms:
     - name: EL
       versions:
@@ -17,3 +17,4 @@ galaxy_info:
     - system
     - packaging
     - development
+    - packer
