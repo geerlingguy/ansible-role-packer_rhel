@@ -63,7 +63,7 @@
   stat: path=/home/vagrant/.vbox_version
   register: virtualbox_check
 
-- include: virtualbox.yml
+- include_tasks: virtualbox.yml
   when: virtualbox_check.stat.exists
 
 # VMware tools installation.
@@ -73,7 +73,7 @@
   failed_when: false
   register: vmware_check
 
-- include: vmware.yml
+- include_tasks: vmware.yml
   when: vmware_check.rc == 0
 
 # Cleanup tasks.
