@@ -92,10 +92,19 @@
   notify: yum-clean-all
 
 - name: Remove any remnants of VirtualBox ISOs.
-  shell: rm -rf VBoxGuestAdditions_*.iso VBoxGuestAdditions_*.iso.?
+- find:
+    paths: "{{ playbook_dir }}"
+    patterns: "VBoxGuestAdditions_*.iso*"
+   register: find_results
+- file:
+    path: "{{ item['path'] }}"
+    state: absent
+  with_items: "{{ find_results['files'] }}"
 
 - name: Remove RedHat interface persistence (step 1).
-  shell: rm -f /etc/udev/rules.d/70-persistent-net.rules
+- file:
+   path: /etc/udev/rules.d/70-persistent-net.rules
+   state: absent
 
 - name: Remove RedHat interface persistence (step 2).
   lineinfile:
