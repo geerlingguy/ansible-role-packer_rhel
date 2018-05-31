@@ -76,16 +76,20 @@
 - include_tasks: vmware.yml
   when: vmware_check.rc == 0
 
-# Cleanup tasks.
+# Handler for 'yum clean all' command whichs in effect runs yum clean packages and yum clean headers
+- name: yum-clean-all
+  command: yum clean all
+  args:
+    warn: no
+
+# Cleanup tasks
 - name: Remove unneeded packages.
   yum: "name={{ item }} state=absent"
   with_items:
     - cpp
     - kernel-devel
     - kernel-headers
-
-- name: Clean up yum.
-  command: yum clean all
+  notify: yum-clean-all
 
 - name: Remove any remnants of VirtualBox ISOs.
   shell: rm -rf VBoxGuestAdditions_*.iso VBoxGuestAdditions_*.iso.?
