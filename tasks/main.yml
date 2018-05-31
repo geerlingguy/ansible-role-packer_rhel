@@ -94,7 +94,7 @@
 - name: Remove any remnants of VirtualBox ISOs.
 - find:
     paths: "{{ playbook_dir }}"
-    patterns: "VBoxGuestAdditions_*.iso*"
+    patterns: 'VBoxGuestAdditions_*.iso,VBoxGuestAdditions_*.iso.?'
    register: find_results
 - file:
     path: "{{ item['path'] }}"
