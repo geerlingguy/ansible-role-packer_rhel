@@ -88,7 +88,7 @@
 
 - name: Clean up yum.
   command: yum clean all
-  changed_when: false
+  tags: ['skip_ansible_lint']
 
 - name: Remove any remnants of VirtualBox ISOs.
   shell: rm -rf VBoxGuestAdditions_*.iso VBoxGuestAdditions_*.iso.?
