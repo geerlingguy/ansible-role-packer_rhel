@@ -5,19 +5,20 @@
   register: kernel_release
 
 - name: Ensure necessary packages are installed.
-  yum: "name={{ item }} state=present"
-  with_items:
-    - wget
-    - perl
-    - cpp
-    - gcc
-    - make
-    - bzip2
-    - kernel-headers
-    - kernel-devel
-    - "kernel-devel-{{ kernel_release.stdout }}"
-    - libselinux-python
-    - cifs-utils
+  yum:
+    name:
+      - wget
+      - perl
+      - cpp
+      - gcc
+      - make
+      - bzip2
+      - kernel-headers
+      - kernel-devel
+      - "kernel-devel-{{ kernel_release.stdout }}"
+      - libselinux-python
+      - cifs-utils
+    state: present
 
 # Fix slow DNS.
 - name: Fix slow DNS (adapted from Bento).
@@ -78,20 +79,24 @@
 
 # Cleanup tasks.
 - name: Remove unneeded packages.
-  yum: "name={{ item }} state=absent"
-  with_items:
-    - cpp
-    - kernel-devel
-    - kernel-headers
+  yum:
+    name:
+      - cpp
+      - kernel-devel
+      - kernel-headers
+    state: absent
 
 - name: Clean up yum.
   command: yum clean all
+  changed_when: false
 
 - name: Remove any remnants of VirtualBox ISOs.
   shell: rm -rf VBoxGuestAdditions_*.iso VBoxGuestAdditions_*.iso.?
+  tags: ['skip_ansible_lint']
 
 - name: Remove RedHat interface persistence (step 1).
-  shell: rm -f /etc/udev/rules.d/70-persistent-net.rules
+  command: rm -f /etc/udev/rules.d/70-persistent-net.rules
+  tags: ['skip_ansible_lint']
 
 - name: Remove RedHat interface persistence (step 2).
   lineinfile:
