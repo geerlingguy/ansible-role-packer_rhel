@@ -1,0 +1,2 @@
+# Configure ssh for "vagrant" user
+config_vagrant_default_ssh: true
