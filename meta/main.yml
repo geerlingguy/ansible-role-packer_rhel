@@ -2,9 +2,8 @@
 dependencies: []
 
 galaxy_info:
-  author: geerlingguy
+  author: olidrouin
   description: RedHat/CentOS configuration for Packer.
-  company: "Midwestern Mac, LLC"
   license: "license (BSD, MIT)"
   min_ansible_version: 2.4
   platforms:
