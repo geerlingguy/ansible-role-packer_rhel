@@ -49,7 +49,11 @@ If you'd like to add additional roles, make sure you add them to the `role_paths
 
 ## Role Variables
 
-None.
+Available variables are listed below, along with default values (see `defaults/main.yml`):
+
+    packer_rhel_libselinux_package: libselinux-python
+
+The libselinux python package to be installed. This is overridden for RHEL 8 to be `python3-libselinux`.
 
 ## Dependencies
 

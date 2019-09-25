@@ -4,6 +4,11 @@
   changed_when: false
   register: kernel_release
 
+- name: Set the appropriate libselinux package for RHEL 8.
+  set_fact:
+    packer_rhel_libselinux_package: python3-libselinux
+  when: ansible_distribution_major_version == '8'
+
 - name: Ensure necessary packages are installed.
   yum:
     name:
@@ -16,7 +21,7 @@
       - kernel-headers
       - kernel-devel
       - "kernel-devel-{{ kernel_release.stdout }}"
-      - libselinux-python
+      - "{{ packer_rhel_libselinux_package }}"
       - cifs-utils
     state: present
 
@@ -28,8 +33,9 @@
     line: 'RES_OPTIONS="single-request-reopen"'
     state: present
 
-- name: Restart network service (explicitly).
+- name: Restart network service (RHEL < 8).
   service: name=network state=restarted
+  when: ansible_distribution_major_version < '8'
 
 # SSH daemon configuration.
 - name: Configure SSH daemon.
@@ -91,11 +97,15 @@
   tags: ['skip_ansible_lint']
 
 - name: Remove any remnants of VirtualBox ISOs.
-  shell: rm -rf VBoxGuestAdditions_*.iso VBoxGuestAdditions_*.iso.?
+  shell: >
+    rm -rf VBoxGuestAdditions_*.iso VBoxGuestAdditions_*.iso.?
+    warn=false
   tags: ['skip_ansible_lint']
 
 - name: Remove RedHat interface persistence (step 1).
-  command: rm -f /etc/udev/rules.d/70-persistent-net.rules
+  command: >
+    rm -f /etc/udev/rules.d/70-persistent-net.rules
+    warn=false
   tags: ['skip_ansible_lint']
 
 - name: Remove RedHat interface persistence (step 2).
