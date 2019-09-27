@@ -15,7 +15,6 @@
 - name: Run VirtualBox guest additions installation.
   command: sh /tmp/vbox/VBoxLinuxAdditions.run
   changed_when: true
-  failed_when: false
 
 - name: Unmount VirtualBox guest additions ISO.
   mount:

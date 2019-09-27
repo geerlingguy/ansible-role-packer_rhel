@@ -18,11 +18,11 @@
       - gcc
       - make
       - bzip2
-      - elfutils-libelf-devel
       - kernel-headers
       - kernel-devel
       - "kernel-devel-{{ kernel_release.stdout }}"
       - "{{ packer_rhel_libselinux_package }}"
+      - elfutils-libelf-devel
       - cifs-utils
     state: present
 
