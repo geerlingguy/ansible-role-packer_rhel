@@ -18,6 +18,7 @@
       - gcc
       - make
       - bzip2
+      - elfutils-libelf-devel
       - kernel-headers
       - kernel-devel
       - "kernel-devel-{{ kernel_release.stdout }}"
