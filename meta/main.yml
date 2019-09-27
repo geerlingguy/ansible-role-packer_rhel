@@ -2,6 +2,7 @@
 dependencies: []
 
 galaxy_info:
+  role_name: packer_rhel
   author: geerlingguy
   description: RedHat/CentOS configuration for Packer.
   company: "Midwestern Mac, LLC"
