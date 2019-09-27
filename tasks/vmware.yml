@@ -29,10 +29,6 @@
     - vmfusion
     - vmfusion-archive
 
-- command: ls -lah /home/vagrant
-  register: vaglist
-- debug: var=vaglist
-
 - name: Mount VMware tools.
   mount:
     name: /tmp/vmfusion
@@ -43,9 +39,12 @@
 
 - name: Decompress VMware Tools installer into archive folder.
   shell: tar xzf /tmp/vmfusion/VMwareTools-*.tar.gz -C /tmp/vmfusion-archive
+  changed_when: true
+  tags: ['skip_ansible_lint']
 
 - name: Run the VMware tools installer.
-  shell: /tmp/vmfusion-archive/vmware-tools-distrib/vmware-install.pl --default
+  command: /tmp/vmfusion-archive/vmware-tools-distrib/vmware-install.pl --default
+  changed_when: true
 
 - name: Unmount VMware tools.
   mount:

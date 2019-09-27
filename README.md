@@ -1,6 +1,6 @@
 # Ansible Role: Packer RHEL/CentOS Configuration for Vagrant VirtualBox
 
-[![Build Status](https://travis-ci.org/geerlingguy/ansible-role-packer-rhel.svg?branch=master)](https://travis-ci.org/geerlingguy/ansible-role-packer-rhel)
+[![Build Status](https://travis-ci.org/geerlingguy/ansible-role-packer_rhel.svg?branch=master)](https://travis-ci.org/geerlingguy/ansible-role-packer_rhel)
 
 This role configures RHEL/CentOS (either minimal or full install) in preparation for it to be packaged as part of a .box file for Vagrant/VirtualBox deployment using [Packer](http://www.packer.io/).
 
@@ -20,7 +20,7 @@ Prior to running this role via Packer, you need to make sure Ansible is installe
         "type": "ansible-local",
         "playbook_file": "ansible/main.yml",
         "role_paths": [
-          "/Users/jgeerling/Dropbox/VMs/roles/geerlingguy.packer-rhel",
+          "/Users/jgeerling/Dropbox/VMs/roles/geerlingguy.packer_rhel",
         ]
       }
     ],
@@ -41,7 +41,7 @@ The files should contain, at a minimum:
       sudo: yes
       gather_facts: yes
       roles:
-        - geerlingguy.packer-rhel
+        - geerlingguy.packer_rhel
 
 You might also want to add another shell provisioner to run cleanup, erasing free space using `dd`, but this is not required (it will just save a little disk space in the Packer-produced .box file).
 
@@ -63,7 +63,7 @@ None.
 
     - hosts: all
       roles:
-        - { role: geerlingguy.packer-rhel }
+        - { role: geerlingguy.packer_rhel }
 
 ## License
 

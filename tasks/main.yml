@@ -94,8 +94,10 @@
     state: absent
 
 - name: Clean up yum.
-  command: yum clean all
-  tags: ['skip_ansible_lint']
+  command: >
+    yum clean all
+    warn=false
+  changed_when: true
 
 - name: Remove any remnants of VirtualBox ISOs.
   shell: >
