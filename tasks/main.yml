@@ -46,8 +46,10 @@
     line: "{{ item.line }}"
     state: present
   with_items:
-    - { regexp: '^UseDNS', line: 'UseDNS no' }
-    - { regexp: '^GSSAPIAuthentication', line: 'GSSAPIAuthentication no' }
+    - regexp: '^UseDNS'
+      line: 'UseDNS no'
+    - regexp: '^GSSAPIAuthentication'
+      line: 'GSSAPIAuthentication no'
 
 # Vagrant SSH configuration.
 - name: Configure Vagrant .ssh directory.
