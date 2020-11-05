@@ -1,6 +1,6 @@
 # Ansible Role: Packer RHEL/CentOS Configuration for Vagrant VirtualBox
 
-[![Build Status](https://travis-ci.com/geerlingguy/ansible-role-packer_rhel.svg?branch=master)](https://travis-ci.com/geerlingguy/ansible-role-packer_rhel)
+[![CI](https://github.com/geerlingguy/ansible-role-packer_rhel/workflows/CI/badge.svg?event=push)](https://github.com/geerlingguy/ansible-role-packer_rhel/actions?query=workflow%3ACI)
 
 This role configures RHEL/CentOS (either minimal or full install) in preparation for it to be packaged as part of a .box file for Vagrant/VirtualBox deployment using [Packer](http://www.packer.io/).
 
