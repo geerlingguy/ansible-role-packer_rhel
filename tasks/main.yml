@@ -19,12 +19,26 @@
       - make
       - bzip2
       - kernel-headers
-      - kernel-devel
-      - "kernel-devel-{{ kernel_release.stdout }}"
       - "{{ packer_rhel_libselinux_package }}"
       - elfutils-libelf-devel
       - cifs-utils
     state: present
+
+- name: Ensure kernel-devel package is installed
+  yum:
+    name:
+      - kernel-devel
+      - "kernel-devel-{{ kernel_release.stdout }}"
+    state: present
+  when: not kernel_release.stdout is search("uek")
+
+- name: Ensure kernel-devel package is installed
+  yum:
+    name:
+      - kernel-uek-devel
+      - "kernel-uek-devel-{{ kernel_release.stdout }}"
+    state: present
+  when: kernel_release.stdout is search("uek")
 
 # Fix slow DNS.
 - name: Fix slow DNS (adapted from Bento).
