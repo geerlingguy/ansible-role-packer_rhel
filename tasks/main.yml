@@ -96,21 +96,15 @@
     state: absent
 
 - name: Clean up yum.
-  command: >
-    yum clean all
-    warn=false
+  command: yum clean all
   changed_when: true
 
 - name: Remove any remnants of VirtualBox ISOs.
-  shell: >
-    rm -rf VBoxGuestAdditions_*.iso VBoxGuestAdditions_*.iso.?
-    warn=false
+  shell: rm -rf VBoxGuestAdditions_*.iso VBoxGuestAdditions_*.iso.?
   tags: ['skip_ansible_lint']
 
 - name: Remove RedHat interface persistence (step 1).
-  command: >
-    rm -f /etc/udev/rules.d/70-persistent-net.rules
-    warn=false
+  command: rm -f /etc/udev/rules.d/70-persistent-net.rules
   tags: ['skip_ansible_lint']
 
 - name: Remove RedHat interface persistence (step 2).
