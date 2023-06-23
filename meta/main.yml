@@ -9,11 +9,9 @@ galaxy_info:
   license: "license (BSD, MIT)"
   min_ansible_version: 2.4
   platforms:
-    - name: EL
+    - name: Fedora
       versions:
-        - 6
-        - 7
-        - 8
+        - all
   galaxy_tags:
     - cloud
     - system
