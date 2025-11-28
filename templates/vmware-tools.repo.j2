@@ -1,9 +1,9 @@
 [vmware-tools]
 name=VMware Tools
-{% if ansible_distribution_major_version == "7" %}
+{% if ansible_facts.distribution_major_version == "7" %}
 baseurl=http://packages.vmware.com/packages/rhel7/x86_64/
 {% else %}
-baseurl=http://packages.vmware.com/tools/esx/latest/rhel{{ ansible_distribution_major_version }}/$basearch
+baseurl=http://packages.vmware.com/tools/esx/latest/rhel{{ ansible_facts.distribution_major_version }}/$basearch
 {% endif %}
 enabled=1
 gpgcheck=1

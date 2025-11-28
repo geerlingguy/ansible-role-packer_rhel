@@ -17,7 +17,7 @@
     src: vmhgfs.modules.j2
     dest: /etc/sysconfig/modules/vmhgfs.modules
     mode: 0755
-  when: ansible_distribution_major_version|int <= 6
+  when: ansible_facts.distribution_major_version|int <= 6
 
 - name: Install open-vm-tools.
   package: name=open-vm-tools state=present
